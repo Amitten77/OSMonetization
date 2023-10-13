@@ -11,13 +11,19 @@ const useAccount = () => {
 }
 
 export const AuthProvider = (props) => {
-    const [account, setAccount] = useState("nothing here yet");
+    const [account, setAccount] = useState("No Metamask Account");
+    const [gitAccount, setGitAccount] = useState("No Github Account")
 
     const changeAccount = (acc) => {
       setAccount(acc)
     }
+
+    const changeGitAccount = (acc) => {
+      setGitAccount(acc)
+    }
+
     return (
-      <AuthContext.Provider value={{ account, changeAccount}}>
+      <AuthContext.Provider value={{ account, changeAccount, gitAccount, changeGitAccount}}>
         {props.children}
       </AuthContext.Provider>
     );
