@@ -12,8 +12,7 @@ export default function HomeLayout({children,}) {
     const {gitAccount, changeGitAccount} = useAccount()
     const router = useRouter();
     useEffect(() => {
-      const shouldRedirect = (typeof gitAccount === 'string') && (gitAccount === 'No Github Account')
-  
+      const shouldRedirect = (secureLocalStorage.getItem('accessToken') == null)  
       if (shouldRedirect) {
         router.push('/');
       }

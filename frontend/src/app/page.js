@@ -3,6 +3,7 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useAccount from '@/contexts/AuthContext';
+import  secureLocalStorage  from  "react-secure-storage";
 
 const CLIENT_ID =  process.env.NEXT_PUBLIC_CLIENT_ID|| "None";
 
@@ -19,6 +20,19 @@ const Login = () => {
     const {gitAccount, changeGitAccount} = useAccount()
     const router = useRouter();
 
+    async function getUserData() {
+        await fetch("http://localhost:4000/getUserData", {
+            method: "GET", 
+            headers: {
+            "Authorization": "Bearer " + secureLocalStorage.getItem("accessToken")//Bearer ACCESSTOKEN
+            }
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            changeGitAccount(data)
+        })
+    }
+
 
     useEffect(() => {
         const queryString = window.location.search;
@@ -34,7 +48,7 @@ const Login = () => {
             }).then((data) => {
             console.log(data);
             if (data.access_token) {
-                localStorage.setItem("accessToken", data.access_token);
+                secureLocalStorage.setItem("accessToken", data.access_token);
                 getUserData().then(() => {
                     router.push('/home');
                 })
@@ -44,22 +58,6 @@ const Login = () => {
         getAccessToken()
         }
     }, [])
-
-    async function getUserData() {
-        console.log(localStorage.getItem("accessToken"))
-        await fetch("http://localhost:4000/getUserData", {
-            method: "GET", 
-            headers: {
-            "Authorization": "Bearer " + localStorage.getItem("accessToken")//Bearer ACCESSTOKEN
-            }
-        }).then((response) => {
-            return response.json();
-        }).then((data) => {
-            console.log(data)
-            changeGitAccount(data)
-            console.log("Hello World")
-        })
-        }
 
     
   return (

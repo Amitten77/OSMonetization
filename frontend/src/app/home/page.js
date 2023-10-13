@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import Web3 from 'web3'
 import useAccount from '@/contexts/AuthContext';
+import secureLocalStorage from 'react-secure-storage';
 
 
 
@@ -13,6 +14,19 @@ export default function Home() {
   const [pyData, setpyData] = useState('nothing here yet')
   const {account, changeAccount} = useAccount()
   const {gitAccount, changeGitAccount} = useAccount()
+
+  async function getUserData() {
+    await fetch("http://localhost:4000/getUserData", {
+        method: "GET", 
+        headers: {
+        "Authorization": "Bearer " + secureLocalStorage.getItem("accessToken")//Bearer ACCESSTOKEN
+        }
+    }).then((response) => {
+        return response.json();
+    }).then((data) => {
+        changeGitAccount(data)
+    })
+}
 
 
   const handleInputChange = (e) => {
@@ -39,6 +53,7 @@ export default function Home() {
       }
     }
     loadWeb3().catch(console.error)
+    getUserData();
   }, [])
   
 

@@ -1,6 +1,8 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import secureLocalStorage from 'react-secure-storage'
+import { useRouter } from 'next/navigation';
 
 const navigation = [
   { name: 'Home', href: '#', current: true },
@@ -12,7 +14,7 @@ function classNames(...classes) {
 }
 
 const SignOutHandler = () => {
-
+  secureLocalStorage.removeItem("accessToken")
 }
 
 export default function Navbar({username, imageURL, name}) {
@@ -20,7 +22,7 @@ export default function Navbar({username, imageURL, name}) {
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <div className="mx-6">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
@@ -60,7 +62,7 @@ export default function Navbar({username, imageURL, name}) {
                   </div>
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 text-white">
                 {username}
 
                 {/* Profile dropdown */}
@@ -99,7 +101,7 @@ export default function Navbar({username, imageURL, name}) {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            href="/"
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                             onClick={SignOutHandler}
                           >
