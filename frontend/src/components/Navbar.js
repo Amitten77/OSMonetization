@@ -1,13 +1,10 @@
+'use client'
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import secureLocalStorage from 'react-secure-storage'
-import { useRouter } from 'next/navigation';
+import { useState } from 'react'
 
-const navigation = [
-  { name: 'Home', href: '#', current: true },
-  { name: 'Ongoing Contracts', href: '#', current: false },
-]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -17,7 +14,13 @@ const SignOutHandler = () => {
   secureLocalStorage.removeItem("accessToken")
 }
 
+
 export default function Navbar({username, imageURL, name}) {
+
+  const [navigation, setNavigation] = useState([
+    { name: 'Home', href: '/home', current: true, url: 'http://localhost:3000/home'  },
+    { name: 'Ongoing Contracts', href: '/home/contracts', current: false, url: 'http://localhost:3000/home/contracts'  },
+  ])
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -40,8 +43,8 @@ export default function Navbar({username, imageURL, name}) {
                 <div className="flex flex-shrink-0 items-center">
                   <img
                     className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
+                    src="/IlliniBlockchainLogo.png"
+                    alt="Illini Blockchain"
                   />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
@@ -51,10 +54,10 @@ export default function Navbar({username, imageURL, name}) {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          window.location.href == item.url ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                           'rounded-md px-3 py-2 text-sm font-medium'
                         )}
-                        aria-current={item.current ? 'page' : undefined}
+                        aria-current={window.location.href == item.url? 'page' : undefined}
                       >
                         {item.name}
                       </a>
@@ -88,16 +91,6 @@ export default function Navbar({username, imageURL, name}) {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Your Profile
-                          </a>
-                        )}
-                      </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
                           <a

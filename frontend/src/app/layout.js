@@ -8,7 +8,7 @@ export const metadata = {
   title: 'OS Monetization',
   description: 'Created by Illini Blockchain!',
   icons: {
-    icon: '/IlliniBlockchain.svg',
+    icon: '/IlliniBlockchainLogo.png',
   },
 }
 

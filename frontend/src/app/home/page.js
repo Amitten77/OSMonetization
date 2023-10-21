@@ -8,6 +8,7 @@ import secureLocalStorage from 'react-secure-storage';
 
 
 
+
 export default function Home() {
   
   const [inputURL, setInputURL] = useState('');
@@ -15,46 +16,11 @@ export default function Home() {
   const {account, changeAccount} = useAccount()
   const {gitAccount, changeGitAccount} = useAccount()
 
-  async function getUserData() {
-    await fetch("http://localhost:4000/getUserData", {
-        method: "GET", 
-        headers: {
-        "Authorization": "Bearer " + secureLocalStorage.getItem("accessToken")//Bearer ACCESSTOKEN
-        }
-    }).then((response) => {
-        return response.json();
-    }).then((data) => {
-        changeGitAccount(data)
-    })
-}
 
 
   const handleInputChange = (e) => {
     setInputURL(e.target.value);
   };
-
-  useEffect(() => {
-    const loadWeb3 = async () => {
-      // Modern dapp browsers...
-      if (window.ethereum) {
-        const temp = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        if (temp) {
-          changeAccount(temp)
-          console.log(account, temp)
-        }
-      }
-      // Legacy dapp browsers...
-      else if (window.web3) {
-          window.web3 = new Web3(window.web3.currentProvider);
-      }
-      // Non-dapp browsers...
-      else {
-          window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
-      }
-    }
-    loadWeb3().catch(console.error)
-    getUserData();
-  }, [])
   
 
   const handleSubmit = (e) => {
@@ -71,43 +37,61 @@ export default function Home() {
   };
 
 
+  // return (
+  //   <div>
+  //   <p>Enter Github Repository URL Here: </p>
+  //   <form onSubmit={handleSubmit}>
+  //     <input
+  //       type="text"
+  //       value={inputURL}
+  //       onChange={handleInputChange}
+  //       placeholder="Enter text here"
+  //     />
+  //     <button type="submit">Submit</button>
+  //   </form>
+  // </div>
+  // )
   return (
-    <div>
-    <p>Enter Github Repository URL Here: </p>
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={inputURL}
-        onChange={handleInputChange}
-        placeholder="Enter text here"
-      />
-      <button type="submit">Submit</button>
-    </form>
-    <div>
-      <h1>DATA:</h1>
-      <p>{pyData}</p>
-      <h1>Metamask Account:</h1>
-      <p>{account}</p>
-    </div>
-    <div>
-            {localStorage.getItem("accessToken") ? 
-            <>
-            {Object.keys(gitAccount).length !== 0 ? 
-            <>
-            <p>Hey there {gitAccount.login}</p>
-            </>
-            :
-            <>
-            No user data
-            </>
-            }
-            </>
-            :
-            <>
-            <p>User is not logged in with Github</p>
-            </>      
-            }
+    <div className="mx-auto max-w-lg">
+      <div>
+        <div className="text-center mt-32">
+          <svg
+            className="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M34 40h10v-4a6 6 0 00-10.712-3.714M34 40H14m20 0v-4a9.971 9.971 0 00-.712-3.714M14 40H4v-4a6 6 0 0110.713-3.714M14 40v-4c0-1.313.253-2.566.713-3.714m0 0A10.003 10.003 0 0124 26c4.21 0 7.813 2.602 9.288 6.286M30 14a6 6 0 11-12 0 6 6 0 0112 0zm12 6a4 4 0 11-8 0 4 4 0 018 0zm-28 0a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+          <h2 className="mt-2 text-base font-semibold leading-6 text-gray-900">Enter Github URL Here</h2>
+          <p className="mt-1 text-sm text-gray-500">
+            Want to start the process of splitting the profits? Enter your Github URL here, and your contribuitors will be notified too!
+          </p>
         </div>
-  </div>
+        <form action="#" className="mt-6 flex" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            placeholder=" Enter your Github Repository URL"
+            value={inputURL}
+            onChange={handleInputChange}
+          />
+          <button
+            type="submit"
+            className="ml-4 flex-shrink-0 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
   )
 }
