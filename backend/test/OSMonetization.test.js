@@ -70,5 +70,16 @@ contract('Contract is Alive', ([deployer, user1, user2, user3]) => {
 
     })
 
+    describe('CalcWeightedCredit', async () => {
+        it('should return "1" when calling calcWeightedCredit with an integer parameter', async () => {
+
+            const result = await contract.calcWeightedCredit(1);
+
+            const event = result.logs[0].args;
+
+            assert.equal(event.credit, "1", "Success")
+        });
+    })
+
 
 })

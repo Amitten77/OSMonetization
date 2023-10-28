@@ -9,6 +9,7 @@ const CLIENT_ID =  process.env.NEXT_PUBLIC_CLIENT_ID|| "None";
 
 function loginWithGithub() {
   window.location.assign("https://github.com/login/oauth/authorize?client_id=" + CLIENT_ID)
+  console.log("Hello world")
 }
 
 

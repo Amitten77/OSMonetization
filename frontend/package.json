@@ -11,6 +11,8 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@mui/lab": "^5.0.0-alpha.149",
+    "@mui/material": "^5.14.14",
     "axios": "^1.5.1",
     "heroicons": "^2.0.18",
     "next": "13.5.4",

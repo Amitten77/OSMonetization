@@ -1,0 +1,56 @@
+.timeline {
+    display: flex;
+  }
+  
+  .event {
+    position: relative;
+    margin-right: 20px;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+    background-color: #000;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+  }
+  
+  .dot::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .dot:hover::before {
+    opacity: 1;
+  }
+  
+  .line {
+    position: absolute;
+    height: 2px;
+    background-color: #000;
+    top: 50%;
+    left: 50%;
+    transform-origin: 0;
+    transform: translate(-50%, -50%);
+    width: 20px; /* Adjust as needed */
+  }
+  
+  .year {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
