@@ -90,18 +90,6 @@ contract OSMonetization {
         repo_id += 1;
     }
 
-    event Credit(string credit);
-
-    function calcWeightedCredit(uint totalDays) public returns (string memory) {
-        string memory value = "1";
-        emit Credit(value);
-        return value;
-    }
-
-    // function stageOneVerifyUsers(string memory _username, mapping(string=> string) memory _decision) {
-
-    // }
-
     ///////////////////
     /* DYLAN'S WORK */
     //////////////////
