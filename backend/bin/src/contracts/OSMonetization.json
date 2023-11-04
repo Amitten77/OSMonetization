@@ -1,0 +1,150 @@
+{
+    "contractName": "OSMonetization",
+    "abi": [
+        {
+            "inputs": [],
+            "name": "calcWeightedCredit",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        }
+    ],
+    "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"calcWeightedCredit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"c:/Users/hairb/OneDrive/Desktop/Blockchain NM Project/OSMonetization/backend/src/contracts/OSMonetization.sol\":\"OSMonetization\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"c:/Users/hairb/OneDrive/Desktop/Blockchain NM Project/OSMonetization/backend/src/contracts/OSMonetization.sol\":{\"keccak256\":\"0xdf10cf3631ac087babfe228abf89c45995b0f2149dfecbd2b8ddf30742c2ec82\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5399569107c840991050f37024e809057fc28fcdbd4a9b32a9beda48d2da214f\",\"dweb:/ipfs/QmQAxarXtfVANEUDWUcPrkRyoXAzUWzcvUJURrBuTCb8h3\"]}},\"version\":1}",
+    "bytecode": "6080604052348015600f57600080fd5b50607780601d6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063a33bf37114602d575b600080fd5b600060405190815260200160405180910390f3fea26469706673582212202965a67f88b1bd67551f6e771a99afdd9e40da70a73f6391d3150b6ee3654b1d64736f6c63430008130033",
+    "deployedBytecode": "6080604052348015600f57600080fd5b506004361060285760003560e01c8063a33bf37114602d575b600080fd5b600060405190815260200160405180910390f3fea26469706673582212202965a67f88b1bd67551f6e771a99afdd9e40da70a73f6391d3150b6ee3654b1d64736f6c63430008130033",
+    "sourceMap": "108:93:0:-:0;;;;;;;;;;;;;;;;;;;",
+    "deployedSourceMap": "108:93:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;139:59;190:4;139:59;;160:25:1;;;148:2;133:18;139:59:0;;;;;;",
+    "sourcePath": "c:/Users/hairb/OneDrive/Desktop/Blockchain NM Project/OSMonetization/backend/src/contracts/OSMonetization.sol",
+    "compiler": {
+        "name": "solc",
+        "version": "0.8.19+commit.7dd6d404"
+    },
+    "ast": {
+        "absolutePath": "c:/Users/hairb/OneDrive/Desktop/Blockchain NM Project/OSMonetization/backend/src/contracts/OSMonetization.sol",
+        "exportedSymbols": {
+            "OSMonetization": [
+                8
+            ]
+        },
+        "id": 9,
+        "license": "MIT",
+        "nodeType": "SourceUnit",
+        "nodes": [
+            {
+                "id": 1,
+                "literals": [
+                    "solidity",
+                    ">=",
+                    "0.4",
+                    ".22",
+                    "<",
+                    "0.9",
+                    ".0"
+                ],
+                "nodeType": "PragmaDirective",
+                "src": "33:32:0"
+            },
+            {
+                "abstract": false,
+                "baseContracts": [],
+                "canonicalName": "OSMonetization",
+                "contractDependencies": [],
+                "contractKind": "contract",
+                "fullyImplemented": true,
+                "id": 8,
+                "linearizedBaseContracts": [
+                    8
+                ],
+                "name": "OSMonetization",
+                "nameLocation": "117:14:0",
+                "nodeType": "ContractDefinition",
+                "nodes": [
+                    {
+                        "body": {
+                            "id": 6,
+                            "nodeType": "Block",
+                            "src": "196:2:0",
+                            "statements": []
+                        },
+                        "functionSelector": "a33bf371",
+                        "id": 7,
+                        "implemented": true,
+                        "kind": "function",
+                        "modifiers": [],
+                        "name": "calcWeightedCredit",
+                        "nameLocation": "148:18:0",
+                        "nodeType": "FunctionDefinition",
+                        "parameters": {
+                            "id": 2,
+                            "nodeType": "ParameterList",
+                            "parameters": [],
+                            "src": "166:2:0"
+                        },
+                        "returnParameters": {
+                            "id": 5,
+                            "nodeType": "ParameterList",
+                            "parameters": [
+                                {
+                                    "constant": false,
+                                    "id": 4,
+                                    "mutability": "mutable",
+                                    "name": "",
+                                    "nameLocation": "-1:-1:-1",
+                                    "nodeType": "VariableDeclaration",
+                                    "scope": 7,
+                                    "src": "190:4:0",
+                                    "stateVariable": false,
+                                    "storageLocation": "default",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_uint256",
+                                        "typeString": "uint256"
+                                    },
+                                    "typeName": {
+                                        "id": 3,
+                                        "name": "uint",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "190:4:0",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_uint256",
+                                            "typeString": "uint256"
+                                        }
+                                    },
+                                    "visibility": "internal"
+                                }
+                            ],
+                            "src": "189:6:0"
+                        },
+                        "scope": 8,
+                        "src": "139:59:0",
+                        "stateMutability": "view",
+                        "virtual": false,
+                        "visibility": "public"
+                    }
+                ],
+                "scope": 9,
+                "src": "108:93:0",
+                "usedErrors": []
+            }
+        ],
+        "src": "33:170:0"
+    },
+    "functionHashes": {
+        "calcWeightedCredit()": "a33bf371"
+    },
+    "gasEstimates": {
+        "creation": {
+            "codeDepositCost": "23800",
+            "executionCost": "75",
+            "totalCost": "23875"
+        },
+        "external": {
+            "calcWeightedCredit()": "146"
+        }
+    }
+}
