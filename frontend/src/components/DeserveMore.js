@@ -15,14 +15,14 @@
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
 
-export default function DeserveMore() {
+export default function DeserveMore({stage}) {
   return (
     <form>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Stage 2</h2>
+          <h2 className="text-base font-semibold leading-7 text-gray-900">Stage {stage}</h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">
-            Welcome to Stage 2 of the Process! In this stage you'll have 24 hours to make your case on why you deserve more or a couple of other users deserve less. 
+            Welcome to Stage {stage} of the Process! In this stage you'll have 24 hours to make your case on why you deserve more or a couple of other users deserve less. 
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

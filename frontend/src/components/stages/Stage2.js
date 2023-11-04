@@ -5,7 +5,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react'
 import DeserveLess from '../DeserveLess'
 
-const Stage2 = () => {
+const Stage2 = ({stage}) => {
 
   const [index, setIndex] = useState(0)
 
@@ -25,11 +25,11 @@ const Stage2 = () => {
 
   let slide = <p>Place Holder</p>
   if (index === 0) {
-    slide = <DeserveMore></DeserveMore>
+    slide = <DeserveMore stage={stage}></DeserveMore>
   } else if (index === 1) {
-    slide = <DeserveLess></DeserveLess>
+    slide = <DeserveLess num={1} stage={stage}></DeserveLess>
   } else if (index === 2) {
-    slide = <DeserveLess></DeserveLess>
+    slide = <DeserveLess num={2} stage={stage}></DeserveLess>
   }
 
   return (

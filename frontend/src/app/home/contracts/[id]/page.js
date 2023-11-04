@@ -41,9 +41,9 @@ export default function Page() {
   if (stage == 1) {
     currentStage = <Stage1 actionRequired={true}></Stage1>
   } else if (stage == 2 || stage == 4 || stage == 6) {
-    currentStage = <Stage2></Stage2>
+    currentStage = <Stage2 stage={stage}></Stage2>
   } else if (stage == 3 || stage == 5 || stage == 7) {
-    currentStage = <Stage3></Stage3>
+    currentStage = <Stage3 stage={stage}></Stage3>
   } else if (stage == 8) {
     currentStage = <Stage8></Stage8>
   }
@@ -57,7 +57,9 @@ export default function Page() {
       </button>
     <div className='grid grid-cols-3'>
       <RepoInfo people={people} repo={repo}></RepoInfo>
+      <div className='justify-self-start ml-8'>
       <Timeline curr_stage={stage}></Timeline>
+      </div>
       <div>
         {currentStage}
       </div>

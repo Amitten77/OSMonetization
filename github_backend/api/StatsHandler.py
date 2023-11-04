@@ -12,6 +12,7 @@ class StatsHandler(Resource):
     headers = {'Authorization': f'Bearer {GITHUB_API_TOKEN}'}
     all_commits = []
     response = requests.get(f'https://api.github.com/repos/{OWNER}/{REPO}/branches', headers=headers)
+    print(response)
     data = response.json()
     branch_names = []
     for branch in data:
@@ -90,6 +91,7 @@ class StatsHandler(Resource):
   
 
   def getStats(self, URL):
+    print("HEY")
     if not self.isvalidgithuburl(URL):
        print("not a valid githuburl")
        return "URL is not a valid Github Project link"
@@ -98,7 +100,8 @@ class StatsHandler(Resource):
 
     owner = parts[1]
     repo = parts[2]
-    githubapitoken = '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'
+   #githubapitoken = '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'
+    githubapitoken = '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'
     commitdata = self.getData(owner, repo, githubapitoken)
 
     #if username not in self.getContributors():
