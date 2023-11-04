@@ -227,4 +227,51 @@ contract OSMonetization {
 
         return (reversedData, reversedNamesInput);
     }
+    function Shuffle(uint n) public view returns (uint[] memory){
+        uint[] memory arr = new uint[](n);
+        
+        for(uint a = 0; a < n; a++){
+            arr[a] = a + 1;
+        }
+        
+        for(uint a = 0; a < n; a++){
+            //uint swap = randInt(a, n - 1);
+            uint swap = uint(blockhash(block.number - a - 1)) % (n-a) + a;
+            uint temp = arr[a];
+            arr[a] = arr[swap];
+            arr[swap] = temp;
+        }
+        
+        return arr;
+    }
+    function Shuffle(uint[] memory arr, uint n) public view returns (uint[] memory){
+        for(uint a = 0; a < n; a++){
+            //uint swap = randInt(a, n - 1);
+            uint swap = uint(blockhash(block.number - a - 1)) % (n-a) + a;
+            uint temp = arr[a];
+            arr[a] = arr[swap];
+            arr[swap] = temp;
+        }
+        return arr;
+    }
+    event Create2DArray(
+        uint[][] result
+    );
+    function CreateArr(uint n, uint edit) public returns (uint[][] memory){
+        require(n > edit, "Number of peer edits per person is too high");
+        uint[] memory arr = Shuffle(n);
+        uint[][] memory result = new uint[][](n);
+        for(uint a = 0; a < n; a++){
+            uint[] memory temp = new uint[](edit);
+            for(uint b = 0; b < edit; b++){
+                temp[b] = arr[(a + b + 1) % n];
+                //temp = Shuffle(temp, edit);
+            }
+            
+                result[a] = temp;
+            
+        }
+        emit Create2DArray(result);
+        return result;
+    }
 }
