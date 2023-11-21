@@ -94,10 +94,8 @@ contract OSMonetization {
     /* DYLAN'S WORK */
     //////////////////
 
-    uint public constant contributors = 3;
-    string[] public finalNames;
-
-    event Credit(uint[contributors] credit);
+    uint[] public _weighted;
+    event Credit(uint[] credit);
 
     function calcWeightedCredit(
         string[] memory names,
@@ -105,17 +103,31 @@ contract OSMonetization {
         uint[] memory lines,
         uint[] memory workdays,
         uint totalDays
-    ) public returns (uint[contributors] memory) {
+    ) public returns (uint[] memory) {
         //Calculates total lines and total commits from all developers
         uint totalLines = 0;
         uint totalCommits = 0;
-        uint[contributors] memory weighted;
         for (uint i = 0; i < names.length; i += 1) {
             totalLines += lines[i];
             totalCommits += commits[i];
         }
 
         //Calculates weighted values for each developer
+        for (uint i = 0; i < _weighted.length; i += 1) {
+            _weighted.pop();
+        }
+        for (uint i = 0; i < _weighted.length; i += 1) {
+            _weighted[i] = 0;
+        }
+        for (uint i = 0; i < _weighted.length; i += 1) {
+            _weighted.pop();
+        }
+        for (uint i = 0; i < _weighted.length; i += 1) {
+            _weighted.pop();
+        }
+
+        uint[] storage weighted = _weighted;
+
         for (uint i = 0; i < names.length; i += 1) {
             uint currCommits = commits[i];
             uint currLines = lines[i];
@@ -130,43 +142,33 @@ contract OSMonetization {
                 (proportionOfCommits ** 3 / 10000) *
                 (proportionOfLines ** 3 / 10000)) / 10000;
 
-            weighted[i] = weightedVal;
+            weighted.push(weightedVal);
         }
 
         //Calculates proportion for each developer
-        uint[contributors] memory outputValues;
         uint totalVal = 0;
         for (uint i = 0; i < weighted.length; i += 1) {
             totalVal += weighted[i];
         }
         for (uint i = 0; i < weighted.length; i += 1) {
-            outputValues[i] = ((weighted[i] * 100000) / totalVal);
+            weighted[i] = (weighted[i] * 100000) / totalVal;
         }
 
         //Finds the developer with the highest contributions and adds extra percentage to their share
         uint totalPortion = 0;
         uint maxIndex = 0;
-        uint max = outputValues[0];
+        uint max = weighted[0];
         for (uint i = 0; i < weighted.length; i += 1) {
-            totalPortion += outputValues[i];
-            if (max < outputValues[i]) {
-                max = outputValues[i];
+            totalPortion += weighted[i];
+            if (max < weighted[i]) {
+                max = weighted[i];
                 maxIndex = i;
             }
         }
-        outputValues[maxIndex] += (100000 - totalPortion);
+        weighted[maxIndex] += (100000 - totalPortion);
 
-        //Ouputs the percentages in an unsorted orderr
-        finalNames = names;
-        uint[contributors] memory value = outputValues;
-        emit Credit(value);
-        return value;
-    }
-
-    event Credit(string[] credit);
-
-    function getFinalNames() public returns (string[] memory) {
-        string[] memory value = finalNames;
+        //Ouputs the percentages in an unsorted order
+        uint[] storage value = weighted;
         emit Credit(value);
         return value;
     }

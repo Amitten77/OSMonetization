@@ -73,13 +73,32 @@ contract('Contract is Alive', ([deployer, user1, user2, user3]) => {
     describe('CalcWeightedCredit', async () => {
         it('Should return the correct weighted proportions for each developer', async () => {
 
-            const result = await contract.calcWeightedCredit(["John", "David", "Jill"], [18, 20, 3], [90, 20, 60], [20, 17, 25], 30);
+            let result = await contract.calcWeightedCredit(["John", "David", "Jill"], [18, 20, 3], [90, 20, 60], [20, 17, 25], 30);
 
-            const event = result.logs[0].args;
+            let event = result.logs[0].args;
 
             assert.equal(event.credit[0], 57629, "Success")
             assert.equal(event.credit[1], 21881, "Success")
             assert.equal(event.credit[2], 20490, "Success")
+
+            let result2 = await contract.calcWeightedCredit(["John", "David", "Jill", "Jack"], [18, 20, 3, 90], [90, 20, 60, 45], [20, 17, 25, 30], 30);
+
+            let event2 = result2.logs[0].args;
+
+            assert.equal(event2.credit[0], 19902, "Success")
+            assert.equal(event2.credit[1], 8550, "Success")
+            assert.equal(event2.credit[2], 12969, "Success")
+            assert.equal(event2.credit[3], 58579, "Success")
+
+            let result3 = await contract.calcWeightedCredit(["John", "David", "Jill", "Jack", "Jen"], [18, 20, 3, 90, 5], [90, 20, 60, 45, 3], [20, 17, 25, 30, 4], 30);
+
+            let event3 = result3.logs[0].args;
+
+            assert.equal(event3.credit[0], 19860, "Success")
+            assert.equal(event3.credit[1], 8298, "Success")
+            assert.equal(event3.credit[2], 12941, "Success")
+            assert.equal(event3.credit[3], 56356, "Success")
+            assert.equal(event3.credit[4], 2545, "Success")
         });
     })
 
