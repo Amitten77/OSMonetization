@@ -94,11 +94,10 @@ contract OSMonetization {
     /* DYLAN'S WORK */
     //////////////////
 
-    // uint public constant totalMoney = 500;
-    uint public constant contributors = 5;
-    string[contributors] public finalNames;
+    uint public constant contributors = 3;
+    string[] public finalNames;
 
-    event Credit(uint[] credit);
+    event Credit(uint[contributors] credit);
 
     function calcWeightedCredit(
         string[] memory names,
@@ -107,23 +106,21 @@ contract OSMonetization {
         uint[] memory workdays,
         uint totalDays
     ) public returns (uint[contributors] memory) {
+        //Calculates total lines and total commits from all developers
         uint totalLines = 0;
         uint totalCommits = 0;
-
         uint[contributors] memory weighted;
-
         for (uint i = 0; i < names.length; i += 1) {
             totalLines += lines[i];
             totalCommits += commits[i];
         }
 
+        //Calculates weighted values for each developer
         for (uint i = 0; i < names.length; i += 1) {
             uint currCommits = commits[i];
             uint currLines = lines[i];
             uint currDays = workdays[i];
 
-            //Math with Uint might be broken
-            //Need to troubleshoot this
             uint proportionOfDays = ((currDays * 100) / totalDays) + 100;
             uint proportionOfCommits = ((currCommits * 100) / totalCommits) +
                 100;
@@ -136,140 +133,94 @@ contract OSMonetization {
             weighted[i] = weightedVal;
         }
 
-        uint[contributors] memory value = calcProportion(weighted, names);
-        emit Credit(value);
-        return value;
-    }
-
-    event Credit(uint[contributors] credit);
-
-    function calcProportion(
-        uint[contributors] memory weighted,
-        string[] memory names
-    ) public returns (uint[contributors] memory) {
+        //Calculates proportion for each developer
         uint[contributors] memory outputValues;
-
         uint totalVal = 0;
         for (uint i = 0; i < weighted.length; i += 1) {
             totalVal += weighted[i];
         }
-
         for (uint i = 0; i < weighted.length; i += 1) {
-            outputValues[i] = ((weighted[i] * 100) / totalVal);
+            outputValues[i] = ((weighted[i] * 100000) / totalVal);
         }
 
-        (
-            uint[contributors] memory sortedOutput,
-            string[contributors] memory sortedNames
-        ) = sort(names, outputValues, names);
-
-        uint[contributors] memory outputProportions;
-        string[contributors] memory outputNames;
-
-        for (uint i = 0; i < contributors; i++) {
-            outputProportions[i] = sortedOutput[i];
-            outputNames[i] = sortedNames[i];
-        }
-
-        finalNames = outputNames;
-
-        uint totalCheck = 0;
-        for (uint i = 0; i < contributors; i++) {
-            totalCheck += outputProportions[i];
-        }
-        if (totalCheck < 100) {
-            outputProportions[0] += (100 - totalCheck);
-        }
-
-        uint[contributors] memory value = outputProportions;
-        emit Credit(value);
-        return value;
-    }
-
-    event Credit(string[contributors] credit);
-
-    function getFinalNames() public returns (string[contributors] memory) {
-        string[contributors] memory value = finalNames;
-        emit Credit(value);
-        return value;
-    }
-
-    //Sorts the wrong way
-    function sort(
-        string[] memory names,
-        uint[contributors] memory data,
-        string[] memory namesInput
-    )
-        public
-        pure
-        returns (uint[contributors] memory, string[contributors] memory)
-    {
-        uint length = data.length;
-        for (uint i = 1; i < length; i++) {
-            uint key = data[i];
-            string memory keyName = names[i];
-            int j = int(i) - 1;
-            while ((int(j) >= 0) && (data[uint(j)] > key)) {
-                data[uint(j + 1)] = data[uint(j)];
-                namesInput[uint(j + 1)] = namesInput[uint(j)];
-                j--;
+        //Finds the developer with the highest contributions and adds extra percentage to their share
+        uint totalPortion = 0;
+        uint maxIndex = 0;
+        uint max = outputValues[0];
+        for (uint i = 0; i < weighted.length; i += 1) {
+            totalPortion += outputValues[i];
+            if (max < outputValues[i]) {
+                max = outputValues[i];
+                maxIndex = i;
             }
-            data[uint(j + 1)] = key;
-            namesInput[uint(j + 1)] = keyName;
         }
+        outputValues[maxIndex] += (100000 - totalPortion);
 
-        uint[contributors] memory reversedData;
-        string[contributors] memory reversedNamesInput;
-        for (uint i = 0; i < contributors; i++) {
-            reversedData[i] = data[contributors - 1 - i];
-            reversedNamesInput[i] = namesInput[contributors - 1 - i];
-        }
-
-        return (reversedData, reversedNamesInput);
+        //Ouputs the percentages in an unsorted orderr
+        finalNames = names;
+        uint[contributors] memory value = outputValues;
+        emit Credit(value);
+        return value;
     }
-    function Shuffle(uint n) public view returns (uint[] memory){
+
+    event Credit(string[] credit);
+
+    function getFinalNames() public returns (string[] memory) {
+        string[] memory value = finalNames;
+        emit Credit(value);
+        return value;
+    }
+
+    /////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
+
+    function Shuffle(uint n) public view returns (uint[] memory) {
         uint[] memory arr = new uint[](n);
-        
-        for(uint a = 0; a < n; a++){
+
+        for (uint a = 0; a < n; a++) {
             arr[a] = a + 1;
         }
-        
-        for(uint a = 0; a < n; a++){
+
+        for (uint a = 0; a < n; a++) {
             //uint swap = randInt(a, n - 1);
-            uint swap = uint(blockhash(block.number - a - 1)) % (n-a) + a;
+            uint swap = (uint(blockhash(block.number - a - 1)) % (n - a)) + a;
             uint temp = arr[a];
             arr[a] = arr[swap];
             arr[swap] = temp;
         }
-        
+
         return arr;
     }
-    function Shuffle(uint[] memory arr, uint n) public view returns (uint[] memory){
-        for(uint a = 0; a < n; a++){
+
+    function Shuffle(
+        uint[] memory arr,
+        uint n
+    ) public view returns (uint[] memory) {
+        for (uint a = 0; a < n; a++) {
             //uint swap = randInt(a, n - 1);
-            uint swap = uint(blockhash(block.number - a - 1)) % (n-a) + a;
+            uint swap = (uint(blockhash(block.number - a - 1)) % (n - a)) + a;
             uint temp = arr[a];
             arr[a] = arr[swap];
             arr[swap] = temp;
         }
         return arr;
     }
-    event Create2DArray(
-        uint[][] result
-    );
-    function CreateArr(uint n, uint edit) public returns (uint[][] memory){
+
+    event Create2DArray(uint[][] result);
+
+    function CreateArr(uint n, uint edit) public returns (uint[][] memory) {
         require(n > edit, "Number of peer edits per person is too high");
         uint[] memory arr = Shuffle(n);
         uint[][] memory result = new uint[][](n);
-        for(uint a = 0; a < n; a++){
+        for (uint a = 0; a < n; a++) {
             uint[] memory temp = new uint[](edit);
-            for(uint b = 0; b < edit; b++){
+            for (uint b = 0; b < edit; b++) {
                 temp[b] = arr[(a + b + 1) % n];
                 //temp = Shuffle(temp, edit);
             }
-            
-                result[a] = temp;
-            
+
+            result[a] = temp;
         }
         emit Create2DArray(result);
         return result;

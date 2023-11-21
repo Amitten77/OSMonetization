@@ -12,7 +12,7 @@ contract('Contract is Alive', ([deployer, user1, user2, user3]) => {
     })
 
 
-    describe('deployment', async() => {
+    describe('deployment', async () => {
         it('deploys successfully', async () => {
             const address = await contract.address
             assert.notEqual(address, 0x0)
@@ -28,9 +28,9 @@ contract('Contract is Alive', ([deployer, user1, user2, user3]) => {
         })
     })
 
-    describe('Account Registration', async() => {
+    describe('Account Registration', async () => {
         before(async () => {
-            await contract.registerUser('ssure4', {from: deployer})
+            await contract.registerUser('ssure4', { from: deployer })
         })
 
         it('account created successfully', async () => {
@@ -43,14 +43,14 @@ contract('Contract is Alive', ([deployer, user1, user2, user3]) => {
         })
 
         it('cannot create invalid account', async () => {
-            await contract.registerUser('ssure4', {from: deployer}).should.be.rejected;
-            await contract.registerUser('', {from: user1}).should.be.rejected;
+            await contract.registerUser('ssure4', { from: deployer }).should.be.rejected;
+            await contract.registerUser('', { from: user1 }).should.be.rejected;
 
         })
 
     })
 
-    describe('Added Repository Successfully', async() => {
+    describe('Added Repository Successfully', async () => {
 
         before(async () => {
             await contract.createRepo('https://github.com/Amitten77/HackIllinois2023', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10, 10])
@@ -65,19 +65,21 @@ contract('Contract is Alive', ([deployer, user1, user2, user3]) => {
         it('Invalid Repository Additions', async () => {
             await contract.createRepo('https://github.com/Amitten77/HackIllinois2023', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10, 10]).should.be.rejected;
             await contract.createRepo('hello world', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10]).should.be.rejected;
-            await contract.createRepo('hello world', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10], {from: user2}).should.be.rejected;
+            await contract.createRepo('hello world', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10], { from: user2 }).should.be.rejected;
         })
 
     })
 
     describe('CalcWeightedCredit', async () => {
-        it('should return "1" when calling calcWeightedCredit with an integer parameter', async () => {
+        it('Should return the correct weighted proportions for each developer', async () => {
 
-            const result = await contract.calcWeightedCredit(1);
+            const result = await contract.calcWeightedCredit(["John", "David", "Jill"], [18, 20, 3], [90, 20, 60], [20, 17, 25], 30);
 
             const event = result.logs[0].args;
 
-            assert.equal(event.credit, "1", "Success")
+            assert.equal(event.credit[0], 57629, "Success")
+            assert.equal(event.credit[1], 21881, "Success")
+            assert.equal(event.credit[2], 20490, "Success")
         });
     })
 
