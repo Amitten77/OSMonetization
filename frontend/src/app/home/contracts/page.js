@@ -41,6 +41,38 @@ const clients = [
     date: 'December 13, 2022', 
     dateTime: '2022-12-13'
   },
+  {
+    id: 5,
+    name: 'Reform',
+    imageUrl: 'https://tailwindui.com/img/logos/48x48/reform.svg',
+    status: 'No Action Required', 
+    date: 'December 13, 2022', 
+    dateTime: '2022-12-13'
+  },
+  {
+    id: 6,
+    name: 'Reform',
+    imageUrl: 'https://tailwindui.com/img/logos/48x48/reform.svg',
+    status: 'No Action Required', 
+    date: 'December 13, 2022', 
+    dateTime: '2022-12-13'
+  },
+  {
+    id: 7,
+    name: 'Reform',
+    imageUrl: 'https://tailwindui.com/img/logos/48x48/reform.svg',
+    status: 'No Action Required', 
+    date: 'December 13, 2022', 
+    dateTime: '2022-12-13'
+  },
+  {
+    id: 8,
+    name: 'Reform',
+    imageUrl: 'https://tailwindui.com/img/logos/48x48/reform.svg',
+    status: 'No Action Required', 
+    date: 'December 13, 2022', 
+    dateTime: '2022-12-13'
+  },
 ]
 
 function classNames(...classes) {
@@ -100,13 +132,13 @@ export default function Contracts() {
               <div className="flex justify-between gap-x-4 py-3">
                 <dt className="text-gray-500">Current Stage</dt>
                 <dd className="text-gray-700">
-                  <time dateTime={client.dateTime}>10</time>
+                  <time dateTime={client.dateTime}>{client.id}</time>
                 </dd>
               </div>
               <div className="flex justify-between gap-x-4 py-3">
                 <dt className="text-gray-500">Time Until Next Stage</dt>
                 <dd className="flex items-start gap-x-2">
-                  <div className="font-medium text-gray-900">10</div>
+                  <div className="font-medium text-gray-900">10 hours</div>
                 </dd>
               </div>
             </dl>
