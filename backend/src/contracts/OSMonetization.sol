@@ -97,8 +97,53 @@ contract OSMonetization {
     }
 
     // function stageOneVerifyUsers(string memory _username, mapping(string=> string) memory _decision) {
-
+        //create the 2d array 
+        //the map contains decisisions
     // }
    
+    mapping(string=> int256[]) public userDecisions; 
+
+    // Function to create the map
+    function initMap(string[] memory usernames) public {
+        // Iterate through each string in the array
+        for (uint i = 0; i < usernames.length; i++) {
+            int[] memory newarr = new int256[](usernames.length);
+            for (uint j = 0; j < newarr.length; j++) {
+                newarr[j] = -1;
+            }
+            userDecisions[usernames[i]] = newarr;
+        }
+    }
+
+
+    function voteDecision(string memory _username, uint256 index, int8 decision) public {
+        require(index < userDecisions[_username].length, "Index out of bounds");
+        require (index >= 0, "Index out of bounds");
+        require(decision == 0 || decision == 1, "Invalid decision");
+
+        // Set the decision at the specified index
+        userDecisions[_username][index] = decision;
+    }
+
+    // Function to determine if a username should be verified
+    function shouldVerify(string memory _username) external view returns (bool) {
+        uint256 numDecisions = 0; 
+        uint256 approves = 0; 
+        uint256 disproves = 0; 
+        for (uint256 i = 0; i < userDecisions[_username].length; i++) {
+            if (userDecisions[_username][i] != -1) {
+                numDecisions++;
+            } else if (userDecisions[_username][i] == 1) {
+                approves++;
+            } else {
+                disproves++; 
+            }
+        }
+        require(numDecisions > 0, "No one has voted for this user yet");
+
+        return (approves > disproves);
+    }
+
+
 
 }

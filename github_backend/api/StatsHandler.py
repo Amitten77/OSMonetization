@@ -13,6 +13,7 @@ class StatsHandler(Resource):
     all_commits = []
     response = requests.get(f'https://api.github.com/repos/{OWNER}/{REPO}/branches', headers=headers)
     data = response.json()
+    print(len(data))
     branch_names = []
     for branch in data:
         branch_names.append(branch['name'])
@@ -88,8 +89,21 @@ class StatsHandler(Resource):
 
     return len(numdays), final_map #this maps a users name to a list of [number of commits, number of days he/she has worked on the project, total number of changes he/she made to the project]
   
+  def combineNameandUsername(self, contributorsmap, username, name):
+    if username in contributorsmap and name in contributorsmap:
+        usernamearray = contributorsmap[username]
+        namearray = contributorsmap[name]
 
-  def getStats(self, URL):
+        numcommits = usernamearray[0] + namearray[0]
+        daysworked = usernamearray[1] + namearray[1]
+        changesmade = usernamearray[2] + namearray[2]
+
+        newlist = [numcommits, daysworked, changesmade]
+
+        del contributorsmap[name]
+        contributorsmap[username] = newlist
+
+  def getStats(self, URL, username, name):
     if not self.isvalidgithuburl(URL):
        print("not a valid githuburl")
        return "URL is not a valid Github Project link"
@@ -98,24 +112,47 @@ class StatsHandler(Resource):
 
     owner = parts[1]
     repo = parts[2]
-    githubapitoken = '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'
+    githubapitoken = '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'
     commitdata = self.getData(owner, repo, githubapitoken)
 
-    #if username not in self.getContributors():
-       #return "You are not a contributor"
+    if username not in self.getContributors():
+       return "You are not a contributor"
     totaldays, finalmap = self.parseCommits(commitdata, githubapitoken)
+
+    #combineUsernameandName should go here 
+    combineNameandUsername(finalmap, username, name)
 
     returnstring = "Total # of Days this project has been worked on for: " + str(totaldays) + "\n"
     returnstring += "Map of Contributors to [# of commits, days worked, changes made]: "
     returnstring += str(finalmap)
     return returnstring
-                  
+
+  def getUserData(self, accesstoken):
+      url = 'https://api.github.com/user'
+      headers = {
+          'Authorization': f'Bearer {accesstoken}',
+      }
+      try:
+          response = requests.get(url, headers=headers)
+
+          if response.ok:
+              user_data = response.json()
+              print('Username:', user_data['login'])
+              print('Actual Name:', user_data['name'])
+              return user_data['login'], user_data['name']
+          else:
+              print('Error:', response.status_code, response.text)
+      except Exception as e:
+          print('Error:', e)
+        
 
   def get(self):
+    githubapitoken = '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'
     URL = request.args.get('url')
+    username, name = getUserData(githubapitoken)
     val = "Github URL Not Found"
     if URL:
-      val = self.getStats(URL)
+      val = self.getStats(URL, username, name)
     print(val)
     return {
       'resultStatus': 'SUCCESS',

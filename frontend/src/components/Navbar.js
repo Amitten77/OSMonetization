@@ -15,7 +15,7 @@ const SignOutHandler = () => {
 }
 
 
-export default function Navbar({username, imageURL, name}) {
+export default function Navbar({username, imageURL,  }) {
 
   const [navigation, setNavigation] = useState([
     { name: 'Home', href: '/home', current: true, url: 'http://localhost:3000/home'  },
