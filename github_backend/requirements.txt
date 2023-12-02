@@ -57,9 +57,6 @@ pycparser==2.21
 PyGetWindow==0.0.9
 PyInputPlus==0.2.12
 PyMsgBox==1.0.9
-pyobjc-core==9.2
-pyobjc-framework-Cocoa==9.2
-pyobjc-framework-Quartz==9.2
 pyparsing==3.0.9
 PyPDF2==1.26.0
 pyperclip==1.8.2

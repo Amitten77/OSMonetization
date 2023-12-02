@@ -1,1 +1,3 @@
 .env
+instance/
+__pycache__/
