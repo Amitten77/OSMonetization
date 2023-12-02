@@ -110,8 +110,11 @@ contract OSMonetization {
     // }
    
     mapping(string=> int256[]) public userDecisions; 
+    string[] public usernames; 
 
     // Function to create the map
+    //userDecisions will map a username to an array of length to the # of users 
+    // -1 means the username hasn't voted for a particlualr person at a certain index 
     function initMap(string[] memory usernames) public {
         // Iterate through each string in the array
         for (uint i = 0; i < usernames.length; i++) {
@@ -123,7 +126,7 @@ contract OSMonetization {
         }
     }
 
-
+    //index represents the user that you want to vote for 
     function voteDecision(string memory _username, uint256 index, int8 decision) public {
         require(index < userDecisions[_username].length, "Index out of bounds");
         require (index >= 0, "Index out of bounds");
@@ -133,22 +136,40 @@ contract OSMonetization {
         userDecisions[_username][index] = decision;
     }
 
+    function findIndex(string memory user) public view returns (int256) {
+        for (uint256 i = 0; i < usernames.length; i++) {
+            if (usernames[i] == user) {
+                // Return the index when the target value is found
+                return int256(i);
+            }
+        }
+        // Return -1 if the target value is not found
+        return -1;
+    }
+
+
     // Function to determine if a username should be verified
     function shouldVerify(string memory _username) external view returns (bool) { 
         uint256 numDecisions = 0; 
         uint256 approves = 0; 
-        uint256 disproves = 0; 
-        for (uint256 i = 0; i < userDecisions[_username].length; i++) {
-            if (userDecisions[_username][i] != -1) {
+        uint256 disproves = 0;
+
+
+        for (uint256 i = 0; i < usernames.length; i++) {
+            int256[] memory voting = userDecisions[usernames[i]];
+            int256 index = findIndex(_username);
+            require (index != 1, "username is not valid");
+            if (voting[uint256(index)] != -1) {
                 numDecisions++;
-            } else if (userDecisions[_username][i] == 1) {
+            }
+
+            if (voting[uint256(index)] == 1) {
                 approves++;
             } else {
                 disproves++; 
             }
         }
         require(numDecisions > 0, "No one has voted for this user yet");
-
         return (approves > disproves);
     }
 
