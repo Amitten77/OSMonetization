@@ -94,8 +94,6 @@ class StatsHandler(Resource):
     if username in contributorsmap and name in contributorsmap:
         usernamearray = contributorsmap[username]
         namearray = contributorsmap[name]
-
-<<<<<<< HEAD
         numcommits = usernamearray[0] + namearray[0]
         daysworked = usernamearray[1] + namearray[1]
         changesmade = usernamearray[2] + namearray[2]
@@ -105,11 +103,8 @@ class StatsHandler(Resource):
         del contributorsmap[name]
         contributorsmap[username] = newlist
 
-  def getStats(self, URL, username, name):
-=======
   def getStats(self, URL):
-    print("HEY")
->>>>>>> 79c80d317bc8e68d34f837b1b98cca3d378453e0
+    #print("HEY")
     if not self.isvalidgithuburl(URL):
        print("not a valid githuburl")
        return "URL is not a valid Github Project link"
@@ -118,19 +113,16 @@ class StatsHandler(Resource):
 
     owner = parts[1]
     repo = parts[2]
-<<<<<<< HEAD
-=======
-   #githubapitoken = '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'
->>>>>>> 79c80d317bc8e68d34f837b1b98cca3d378453e0
-    githubapitoken = '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'
+    githubapitoken = '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'
     commitdata = self.getData(owner, repo, githubapitoken)
 
-    if username not in self.getContributors():
+    username, actualname = self.getUserData(githubapitoken)
+    if username not in self.getContributors(commitdata):
        return "You are not a contributor"
     totaldays, finalmap = self.parseCommits(commitdata, githubapitoken)
 
     #combineUsernameandName should go here 
-    combineNameandUsername(finalmap, username, name)
+    self.combineNameandUsername(finalmap, username, actualname)
 
     returnstring = "Total # of Days this project has been worked on for: " + str(totaldays) + "\n"
     returnstring += "Map of Contributors to [# of commits, days worked, changes made]: "
@@ -157,12 +149,12 @@ class StatsHandler(Resource):
         
 
   def get(self):
-    githubapitoken = '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'
+    githubapitoken = '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'
     URL = request.args.get('url')
-    username, name = getUserData(githubapitoken)
+    #username, name = getUserData(githubapitoken)
     val = "Github URL Not Found"
     if URL:
-      val = self.getStats(URL, username, name)
+      val = self.getStats(URL)
     print(val)
     return {
       'resultStatus': 'SUCCESS',

@@ -26,10 +26,10 @@ export default function HomeLayout({children,}) {
     const {account, changeAccount, gitAccount, changeGitAccount} = useAccount()
     const router = useRouter();
     useEffect(() => {
-      const shouldRedirect = (secureLocalStorage.getItem('accessToken') == null)  
+      /*const shouldRedirect = (secureLocalStorage.getItem('accessToken') == null)  
       if (shouldRedirect) {
         router.push('/');
-      } else {
+      } else {*/
         const loadWeb3 = async () => {
           // Modern dapp browsers...
           if (window.ethereum) {
@@ -49,7 +49,7 @@ export default function HomeLayout({children,}) {
         }
         loadWeb3().catch(console.error)
         getUserData();
-      }
+      //}
     }, []);
     return (
     <>
