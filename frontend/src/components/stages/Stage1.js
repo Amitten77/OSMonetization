@@ -15,7 +15,7 @@ const people = [
   }
 ]
 
-const Stage1 = ({actionRequired, vote}) => {
+const Stage1 = ({actionRequired}) => {
 
   const handleClick  = () => {
     setId(id + 1);
@@ -28,14 +28,15 @@ const Stage1 = ({actionRequired, vote}) => {
   }
   return (
     <div>
-        <h1>Welcome to the Contract Creation Stage (Stage 1)!</h1>
-        <p>The first step of the process is to vote on users you believe are worthy versus users you don't believe deserve earn a share of the profits</p>
+        <h1 className='font-bold text-center text-2xl mb-4'>Welcome to the Contract Creation Stage (Stage 1)!</h1>
+        <p className='text-center mb-16'>The first step of the process is to vote on users you believe are worthy versus users you don't believe deserve earn a share of the profits</p>
         {actionRequired ? 
-         <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className=''>
+         <ul role="list" className="grid grid-cols-1 gap-6">
          {
            <li
              key={person.name}
-             className="col-span-3 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow w-full"
+             className="flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center place-self-center shadow w-3/5"
            >
              <div className="flex flex-1 flex-col p-8">
                <img className="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src={"https://github.com/" + person.name  +".png"} alt="" />
@@ -56,7 +57,8 @@ const Stage1 = ({actionRequired, vote}) => {
              </div>
            </li>
          }
-       </ul> :
+       </ul>
+       </div> :
         <p>No Action Required</p>
         }
     </div>

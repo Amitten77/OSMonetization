@@ -7,11 +7,12 @@ import Navbar from '@/components/Navbar';
 import  secureLocalStorage  from  "react-secure-storage";
 import Web3 from 'web3'
 
+const SERVER = "https://os-monetization-auth-backend.onrender.com/"
 
 export default function HomeLayout({children,}) {
 
     async function getUserData() {
-      await fetch("http://localhost:4000/getUserData", {
+      await fetch(SERVER + "getUserData", {
           method: "GET", 
           headers: {
           "Authorization": "Bearer " + secureLocalStorage.getItem("accessToken")//Bearer ACCESSTOKEN
@@ -20,6 +21,7 @@ export default function HomeLayout({children,}) {
           return response.json();
       }).then((data) => {
           changeGitAccount(data)
+          secureLocalStorage.setItem("github_username", data.login)
       })
     }
 

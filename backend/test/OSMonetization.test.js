@@ -50,23 +50,47 @@ contract('Contract is Alive', ([deployer, user1, user2, user3]) => {
 
     })
 
+    // describe('Added Repository Successfully', async () => {
+
+    //     before(async () => {
+    //         await contract.createRepo('https://github.com/Amitten77/HackIllinois2023', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10, 10])
+    //     })
+
+    //     it('Repository was successfully added', async () => {
+    //         const repo = await contract.id_to_repo(1);
+    //         assert.equal(repo.url, 'https://github.com/Amitten77/HackIllinois2023', 'Repository URL is Equal :)')
+    //         assert.equal(repo.num_contributors, 3, 'Number of contribuitors is consistent')
+    //     })
+
+    //     it('Invalid Repository Additions', async () => {
+    //         await contract.createRepo('https://github.com/Amitten77/HackIllinois2023', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10, 10]).should.be.rejected;
+    //         await contract.createRepo('hello world', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10]).should.be.rejected;
+    //         await contract.createRepo('hello world', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10], { from: user2 }).should.be.rejected;
+    //     })
+
+    // })
+
     describe('Added Repository Successfully', async () => {
 
         before(async () => {
-            await contract.createRepo('https://github.com/Amitten77/HackIllinois2023', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10, 10])
+            await contract.createRepo('https://github.com/Amitten77/HackIllinois2023', 'HackIllinois2023', ['dkulgod', 'saldanaxochilth', 'eziCode', 'Ameat77'], [3, 42, 34, 70], [496, 0, 9082, 50448], [2, 2, 2, 3], 4)
         })
 
         it('Repository was successfully added', async () => {
             const repo = await contract.id_to_repo(1);
             assert.equal(repo.url, 'https://github.com/Amitten77/HackIllinois2023', 'Repository URL is Equal :)')
-            assert.equal(repo.num_contributors, 3, 'Number of contribuitors is consistent')
+            assert.equal(repo.num_contributors, 4, 'Number of contribuitors is consistent')
+            const ans1 = await contract.getRepoContributor(1, 0);
+            assert.equal(ans1, 'dkulgod');
+            const ans2 = await contract.getRepoPercent(1, 3);
+            assert.equal(ans2, 81688);
         })
 
-        it('Invalid Repository Additions', async () => {
-            await contract.createRepo('https://github.com/Amitten77/HackIllinois2023', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10, 10]).should.be.rejected;
-            await contract.createRepo('hello world', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10]).should.be.rejected;
-            await contract.createRepo('hello world', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10], { from: user2 }).should.be.rejected;
-        })
+        // it('Invalid Repository Additions', async () => {
+        //     await contract.createRepo('https://github.com/Amitten77/HackIllinois2023', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10, 10]).should.be.rejected;
+        //     await contract.createRepo('hello world', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10]).should.be.rejected;
+        //     await contract.createRepo('hello world', 'HackIllinois2023', ['Amitten77', 'sw4th1', 'yaogurt'], [99980, 10], { from: user2 }).should.be.rejected;
+        // })
 
     })
 

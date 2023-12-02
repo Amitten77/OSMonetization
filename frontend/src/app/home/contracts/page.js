@@ -2,6 +2,14 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid'
+import { useState, useEffect } from 'react'
+import { OSMonetization } from '@/components/abi'
+import React from 'react'
+import Web3 from 'web3'
+import useAccount from '@/contexts/AuthContext'
+import secureLocalStorage from 'react-secure-storage'
+
+
 
 const statuses = {
   "No Action Required": 'text-green-700 bg-green-50 ring-green-600/20',
@@ -43,76 +51,143 @@ const clients = [
   },
 ]
 
+const CONTRACT_ABI = OSMonetization;
+const CONTRACT_ADDRESS = '0x7A17237d99C0c2032BdED702e60a4aACF2152809'
+const web3 = new Web3(window.ethereum);
+const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Contracts() {
+
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+      const loadBlockchainData = async () => {
+        let gitAccount = secureLocalStorage.getItem("github_username");
+        const length = await contract.methods.getUserReposLength(gitAccount).call();
+        console.log(gitAccount)
+        for (var i = 0; i < Number(length); i++) {
+          const client = await contract.methods.getUserRepo(gitAccount, i).call();
+          setClients(clients => [...clients, client])
+      }
+      setLoading(false);
+      }
+      loadBlockchainData().catch(console.error)
+  }, [])
+
+
   return (
     <div>
-      <h1 className='mt-16 ml-2 text-lg font-bold'>Your Contracts in the Making!</h1>
-      <ul role="list" className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8 mt-4">
-        {clients.map((client) => (
-          <li key={client.id} className="overflow-hidden rounded-xl border border-gray-200">
-            <div className="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
-              <div className="text-sm font-medium leading-6 text-gray-900">{client.name}</div>
-              <div
-                    className={classNames(
-                      statuses[client.status],
-                      'rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset'
-                    )}
-                  >
-                    {client.status}
-              </div>
-              <Menu as="div" className="relative ml-auto">
-                <Menu.Button className="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500">
-                  <span className="sr-only">Open options</span>
-                  <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
-                </Menu.Button>
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href={"/home/contracts/" + client.id}
-                          className={classNames(
-                            active ? 'bg-gray-50' : '',
-                            'block px-3 py-1 text-sm leading-6 text-gray-900'
-                          )}
-                        >
-                          View<span className="sr-only">, {client.name}</span>
-                        </a>
+      { loading ? <p>Loading...</p> :
+      <div className='ml-8 mr-8'>
+        <h1 className='mt-16 text-lg font-bold'>Your Contracts in the Making!</h1>
+        <ul role="list" className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8 mt-4">
+          {clients.map((client) => (
+            <li key={Number(client.repo_id)} className="overflow-hidden rounded-xl border border-gray-200">
+              <div className="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
+                <div className="text-sm font-medium leading-6 text-gray-900">{client.url.split('/').pop()}</div>
+                <div
+                      className={classNames(
+                        statuses["No Action Required"],
+                        'rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset'
                       )}
-                    </Menu.Item>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-            </div>
-            <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
-              <div className="flex justify-between gap-x-4 py-3">
-                <dt className="text-gray-500">Current Stage</dt>
-                <dd className="text-gray-700">
-                  <time dateTime={client.dateTime}>10</time>
-                </dd>
+                    >
+                      {"No Action Required"}
+                </div>
+                <Menu as="div" className="relative ml-auto">
+                  <Menu.Button className="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500">
+                    <span className="sr-only">Open options</span>
+                    <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
+                  </Menu.Button>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href={"/home/contracts/" + client.repo_id}
+                            className={classNames(
+                              active ? 'bg-gray-50' : '',
+                              'block px-3 py-1 text-sm leading-6 text-gray-900'
+                            )}
+                          >
+                            View<span className="sr-only">, {client.url}</span>
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href={client.url}
+                            className={classNames(
+                              active ? 'bg-gray-50' : '',
+                              'block px-3 py-1 text-sm leading-6 text-gray-900'
+                            )}
+                          >
+                            Visit Repo<span className="sr-only">, {client.url}</span>
+                          </a>
+                        )}
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
               </div>
-              <div className="flex justify-between gap-x-4 py-3">
-                <dt className="text-gray-500">Time Until Next Stage</dt>
-                <dd className="flex items-start gap-x-2">
-                  <div className="font-medium text-gray-900">10</div>
-                </dd>
-              </div>
-            </dl>
-          </li>
-        ))}
-      </ul>
+              <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
+                <div className="flex justify-between gap-x-4 py-3">
+                    <dt className="text-gray-500">Current Stage</dt>
+                    <dd className="flex items-start gap-x-2">
+                      <div className="font-medium text-gray-900">{Number(client.stage)}</div>
+                    </dd>
+                </div>
+              </dl>
+            </li>
+          ))}
+        </ul>
+      </div>
+      }
     </div>
   )
 }
+
+// const Page = () => {
+//   const [result, setResult] = useState('roony');
+
+
+//   const fetchData = async () => {
+//     try {
+//       console.log("YO")
+//       const result = await contract.methods.getName().call();
+//       setResult(result);
+//       console.log(result);
+//       const accounts = await window.ethereum.enable();
+//       const account = accounts[0]; // The first account in MetaMask
+//       contract.methods.createRepo('https://github.com/Amitten77/HackIllinois2023', ['dkulgod', 'saldanaxochilth', 'eziCode', 'Amitten77'], [3, 42, 34, 70]).send({from: account }, 
+//       function(error, transactionHash){
+//           console.log(error);
+//     });
+//       console.log(account)
+//     } catch (error) {
+//       console.error('Error fetching data: ', error);
+//     }
+//   };
+
+//     return (
+//       <div>
+//         <button onClick={fetchData}>Get Results</button>
+//         <p>Result: {result}</p>
+//       </div>
+//     );
+// }
+
+// export default Page

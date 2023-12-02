@@ -62,6 +62,7 @@ const stages = [
 
 export default function BasicTimeline({curr_stage}) {
   return (
+    <div className='col-span-1'>
     <Timeline>
       {stages.map((stage, index) => {
 
@@ -83,5 +84,6 @@ export default function BasicTimeline({curr_stage}) {
         )
       })}
     </Timeline>
+    </div>
   );
 }

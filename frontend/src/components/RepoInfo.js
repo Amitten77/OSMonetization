@@ -4,8 +4,8 @@ export default function RepoInfo( {people, repo}) {
 
    const sortedPeople = [...people].sort((a, b) => b.percent - a.percent);
     return (
-      <div>
-        <h1>Top Contributors for {repo}</h1>
+      <div className="ml-8 col-span-1">
+        <h1 className="text-center text-2xl mt-16 mb-4">Top Contributors for {repo}</h1>
         <ul role="list" className="divide-y divide-gray-100">
           {sortedPeople.map((person) => (
             <li key={person.name} className="flex justify-between gap-x-6 py-5">

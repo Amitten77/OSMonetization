@@ -6,6 +6,7 @@ import useAccount from '@/contexts/AuthContext';
 import  secureLocalStorage  from  "react-secure-storage";
 
 const CLIENT_ID =  process.env.NEXT_PUBLIC_CLIENT_ID|| "None";
+const SERVER = "https://os-monetization-auth-backend.onrender.com/"
 
 function loginWithGithub() {
   window.location.assign("https://github.com/login/oauth/authorize?client_id=" + CLIENT_ID)
@@ -32,7 +33,7 @@ const Login = () => {
     const router = useRouter();
 
     async function getUserData() {
-        await fetch("http://localhost:4000/getUserData", {
+        await fetch(SERVER + "getUserData", {
             method: "GET", 
             headers: {
             "Authorization": "Bearer " + secureLocalStorage.getItem("accessToken")//Bearer ACCESSTOKEN
@@ -52,7 +53,8 @@ const Login = () => {
         console.log(codeParam)
         if (codeParam) {
         async function getAccessToken() {
-            await fetch("http://localhost:4000/getAccessToken?code=" + codeParam, {
+          console.log(SERVER + "getAccessToken?code=" + codeParam)
+            await fetch(SERVER + "getAccessToken?code=" + codeParam, {
             method: "GET"
             }).then((response) => {
             return response.json();
@@ -67,6 +69,7 @@ const Login = () => {
             })
         }
         getAccessToken()
+        console.log("SJ")
         }
     }, [])
 

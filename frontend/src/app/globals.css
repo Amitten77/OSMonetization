@@ -11,3 +11,17 @@
 body {
 
 }
+
+@keyframes load {
+  0% { width: 0% }
+  16.67% { width: 16.67% }
+  33.34% { width: 33.34% }
+  50.01% { width: 50.01% }
+  66.68% { width: 66.68% }
+  83.35% { width: 83.35% }
+  100% { width: 100% }
+}
+
+.loading-bar {
+  animation: load 6s linear infinite;
+}
