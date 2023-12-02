@@ -134,7 +134,7 @@ contract OSMonetization {
     }
 
     // Function to determine if a username should be verified
-    function shouldVerify(string memory _username) external view returns (bool) {
+    function shouldVerify(string memory _username) external view returns (bool) { 
         uint256 numDecisions = 0; 
         uint256 approves = 0; 
         uint256 disproves = 0; 

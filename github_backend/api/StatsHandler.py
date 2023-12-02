@@ -85,6 +85,8 @@ class StatsHandler(Resource):
     final_map = {}
     for name in set(name_to_numcommits.keys()) | set(name_to_uniquedates.keys()) | set(name_to_changes.keys()):
         values = [name_to_numcommits.get(name), len(name_to_uniquedates.get(name)), name_to_changes.get(name)]
+        if name == "Ameat77":
+           name = "Amitten77"
         final_map[name] = values
 
 
