@@ -25,7 +25,6 @@ flatbuffers==23.5.26
 fonttools==4.41.1
 fsspec==2023.10.0
 h11==0.14.0
-huggingface-hub==0.19.4
 idna==3.4
 itsdangerous==2.1.2
 jdcal==1.4.1
@@ -35,15 +34,11 @@ kiwisolver==1.4.4
 lxml==4.9.3
 MarkupSafe==2.1.1
 matplotlib==3.7.2
-mediapipe==0.10.2
 MouseInfo==0.1.3
 mpmath==1.3.0
 mss==9.0.1
 networkx==3.2.1
-nltk==3.8.1
 numpy==1.23.5
-opencv-contrib-python==4.8.0.74
-opencv-python==4.8.0.74
 openpyxl==3.1.2
 outcome==1.2.0
 packaging==23.1
@@ -86,10 +81,6 @@ spotipy==2.23.0
 stdiomask==0.0.6
 sympy==1.12
 tenacity==8.1.0
-tokenizers==0.15.0
-torch==2.1.1
-torchaudio==2.1.1
-torchvision==0.16.1
 tqdm==4.64.1
 transformers==4.35.2
 trio==0.22.2
