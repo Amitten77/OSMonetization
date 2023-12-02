@@ -10,8 +10,8 @@ const CONTRACT_ABI = OSMonetization;
 const CONTRACT_ADDRESS = '0x7A17237d99C0c2032BdED702e60a4aACF2152809'
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-const PYSERVER = "https://webservice-github-fetch.onrender.com/"
-
+//const PYSERVER = "https://webservice-github-fetch.onrender.com/"
+const PYSERVER = "http://127.0.0.1:5000/"
 
 export default function Home() {
   

@@ -120,32 +120,6 @@ contract OSMonetization {
         repo_id += 1;
     }
 
-    // function createRepoTest(
-    //     string memory _repositoryURL,
-    //     string[10] memory _users,
-    //     uint[10] memory _percents
-    // ) public {
-    //     require(_users.length == _percents.length);
-
-    //     Respository memory repo = Respository(
-    //         repo_id,
-    //         _repositoryURL,
-    //         1,
-    //         _users.length,
-    //         _users,
-    //         _percents
-    //     );
-    //     id_to_repo[repo_id] = repo;
-    //     for (uint i = 0; i < _users.length; i++) {
-    //         if (bytes(_users[i]).length > 0) {
-    //         uint currIdx = user_length[_users[i]];
-    //         user_repos[_users[i]][currIdx] = (repo_id);
-    //         user_length[_users[i]] = currIdx + 1;
-    //         }
-    //     }
-    //     repo_id += 1;
-    // }
-
     ///////////////////
     /* DYLAN'S WORK */
     //////////////////
@@ -283,4 +257,147 @@ contract OSMonetization {
         emit Create2DArray(result);
         return result;
     }
+
+    mapping(string=> int256[]) public userDecisions; 
+
+    // Function to create the map
+    function initMap(string[] memory usernames) public {
+        // Iterate through each string in the array
+        for (uint i = 0; i < usernames.length; i++) {
+            int[] memory newarr = new int256[](usernames.length);
+            for (uint j = 0; j < newarr.length; j++) {
+                newarr[j] = -1;
+            }
+            userDecisions[usernames[i]] = newarr;
+        }
+    }
+
+
+    function voteDecision(string memory _username, uint256 index, int8 decision) public {
+        require(index < userDecisions[_username].length, "Index out of bounds");
+        require (index >= 0, "Index out of bounds");
+        require(decision == 0 || decision == 1, "Invalid decision");
+
+        // Set the decision at the specified index
+        userDecisions[_username][index] = decision;
+    }
+
+    // Function to determine if a username should be verified
+    function shouldVerify(string memory _username) external view returns (bool) { 
+        uint256 numDecisions = 0; 
+        uint256 approves = 0; 
+        uint256 disproves = 0; 
+        for (uint256 i = 0; i < userDecisions[_username].length; i++) {
+            if (userDecisions[_username][i] != -1) {
+                numDecisions++;
+            } else if (userDecisions[_username][i] == 1) {
+                approves++;
+            } else {
+                disproves++; 
+            }
+        }
+        require(numDecisions > 0, "No one has voted for this user yet");
+
+        return (approves > disproves);
+    }
+    
+
+
+    struct Case{
+        uint id;
+        address maker;
+        address target;
+        bool more; //False means deserves less
+        uint net;
+        uint votes;
+    }
+    Case[] AllCases;
+    function NewCase(address target, bool more) public{
+        AllCases.push(Case(AllCases.length, msg.sender, target, more, 0, 0));
+    }
+
+
+    //Stage 3
+    mapping(address => bool[]) public _voted;
+
+    function CreateMap(address[] memory ads, int numofcases) public {
+        for (uint a = 0; a < ads.length; a++) {
+            bool[] memory cases = new bool[](uint(numofcases));
+            for (int b = 0; b < numofcases; b++) {
+                cases[uint(b)] = false;
+            }
+            _voted[ads[a]] = cases;
+        }
+    }
+    function YesVote(uint id) public{
+        /*
+        if(msg.sender == AllCases[id].maker  msg.sender == AllCases[id].target){
+            //Tell them they can't vote on their own cases
+            return;
+        }
+        if(voted[msg.sender][id]){
+            //Tell them they already voted on this case
+            return;
+        }
+        /
+        voted[msg.sender][id] = true;
+        AllCases[id].votes++;
+        AllCases[id].net++;
+    }
+    function NoVote(uint id) public{
+        /
+        if(msg.sender == AllCases[id].maker  msg.sender == AllCases[id].target){
+            //Tell them they can't vote on their own cases
+            return;
+        }
+        if(voted[msg.sender][id]){
+            //Tell them they already voted on this case
+            return;
+        }
+        */
+        _voted[msg.sender][id] = true;
+        AllCases[id].votes++;
+        AllCases[id].net--;
+    }
+    function NoVote(uint id) public{
+        /*
+        if(msg.sender == AllCases[id].maker  msg.sender == AllCases[id].target){
+            //Tell them they can't vote on their own cases
+            return;
+        }
+        if(voted[msg.sender][id]){
+            //Tell them they already voted on this case
+            return;
+        }
+        */
+        _voted[msg.sender][id] = true;
+        AllCases[id].votes++;
+        AllCases[id].net--;
+    }
+    Case[] YesCases;
+    Case[] NoCases;
+    function Fill() public{
+        for(uint a=0; a<AllCases.length; a++){
+            if(AllCases[a].net > 0){
+                if(AllCases[a].more){
+                    YesCases.push(AllCases[a]);
+                }
+                else{
+                    NoCases.push(AllCases[a]);
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

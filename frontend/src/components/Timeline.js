@@ -32,32 +32,16 @@ const stages = [
     },
     {
         name: 'Stage 2',
-        desc: 'Make your case on what people deserve! (Round 1)'
+        desc: 'Make your case on what people deserve!'
     },
     {
         name: 'Stage 3',
-        desc: 'Vote on the cases! (Round 1)'
+        desc: 'Vote on the cases!'
     },
     {
         name: 'Stage 4',
-        desc: 'Make your case on what people deserve! (Round 2)'
-    },
-    {
-        name: 'Stage 5',
-        desc: 'Vote on the cases! (Round 2)'
-    },
-    {
-        name: 'Stage 6',
-        desc: 'Make your case on what people deserve! (Round 3)'
-    },
-    {
-        name: 'Stage 7',
-        desc: 'Vote on the cases! (Round 3)'
-    },
-    {
-        name: 'Stage 8',
         desc: 'All done!'
-    },
+    }
 ]
 
 export default function BasicTimeline({curr_stage}) {
@@ -72,7 +56,7 @@ export default function BasicTimeline({curr_stage}) {
               <TimelineItem key={index}>
                   <TimelineSeparator>
                   <TimelineDot className='dot' color={stage.name == "Stage " + curr_stage ? "success" : "grey"}/>
-                  { stage.name != 'Stage 8' ?
+                  { stage.name != 'Stage 4' ?
                   <TimelineConnector /> :
                   <div></div>
                   }

@@ -4,6 +4,8 @@ from urllib.parse import urlparse
 import requests 
 import math 
 import re
+import os
+
 
 
 class StatsHandler(Resource):
@@ -103,8 +105,7 @@ class StatsHandler(Resource):
 
     owner = parts[1]
     repo = parts[2]
-    githubapitoken = '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'
-    #githubapitoken = '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'
+    githubapitoken = "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"
     commitdata = self.getData(owner, repo, githubapitoken)
 
     #if username not in self.getContributors():

@@ -3,9 +3,12 @@ from flask import Flask, send_from_directory
 from flask_restful import Api
 from flask_cors import CORS #comment this on deployment
 from api.StatsHandler import StatsHandler
+import os
+
 
 
 app = Flask(__name__)
+app.config['GITHUB_API_TOKEN'] = os.environ.get('GITHUB_API_TOKEN')
 CORS(app) #comment this on deployment
 api = Api(app)
 
