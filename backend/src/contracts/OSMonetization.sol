@@ -108,13 +108,13 @@ contract OSMonetization {
         //create the 2d array 
         //the map contains decisisions
     // }
-   
-    mapping(string=> int256[]) public userDecisions; 
-    string[] public usernames; 
 
+    //mapping (int256=> mapping(string=> int256[])) public userDecisions; // this maps a particular project's id to a mapping of userdecisions 
+    
     // Function to create the map
     //userDecisions will map a username to an array of length to the # of users 
     // -1 means the username hasn't voted for a particlualr person at a certain index 
+    /*
     function initMap(string[] memory usernames) public {
         // Iterate through each string in the array
         for (uint i = 0; i < usernames.length; i++) {
@@ -125,54 +125,94 @@ contract OSMonetization {
             userDecisions[usernames[i]] = newarr;
         }
     }
+    
 
-    //index represents the user that you want to vote for 
-    function voteDecision(string memory _username, uint256 index, int8 decision) public {
-        require(index < userDecisions[_username].length, "Index out of bounds");
-        require (index >= 0, "Index out of bounds");
-        require(decision == 0 || decision == 1, "Invalid decision");
+    function initProjectMap(string[] memory usernames, int256 projectid) public {
+        mapping(string=> int256[]) memory projectmap;
+    
+        for (uint i = 0; i < usernames.length; i++) {
+            int[] memory newarr = new int256[](usernames.length);
+            for (uint j = 0; j < newarr.length; j++) {
+                newarr[j] = -1; 
+            }
+            projectmap[usernames[i]] = newarr; 
+        }
+        userDecisions[projectid] = projectmap; 
+    }
+    */
 
-        // Set the decision at the specified index
-        userDecisions[_username][index] = decision;
+
+    //##################### STAGE 1 STARTS HERE ##############################
+    mapping(int256 => int256[10][10]) public userDecisions; 
+
+    mapping(int256=> string[]) public usernames; //this maps a particular project's id to a string array containg usernames of that particular project 
+
+
+    function initProjectMap(string[] memory users, int256 projectid) public {
+        int256[10][10] storage projectmap = userDecisions[projectid]; // Directly reference storage
+        require(projectmap.length == 0, "Project map already initialized");
+
+        for (uint256 i = 0; i < 10; i++) {
+            for (uint256 j = 0; j < 10; j++) {
+                projectmap[i][j] = -1; // Initialize with a value of your choice
+            }
+        }
+        usernames[projectid] = users;
     }
 
-    function findIndex(string memory user) public view returns (int256) {
-        for (uint256 i = 0; i < usernames.length; i++) {
-            if (usernames[i] == user) {
-                // Return the index when the target value is found
+
+    //index represents the user that you want to vote for, it is zero indexed. 
+    function voteDecision(string memory _username, string memory _targetusername, int8 decision, int256 projectid) public {
+        require(decision == 0 || decision == 1, "Invalid decision");
+        //get the index associated with teh _username 
+        int256 indexofusername = findIndex(_username, usernames[projectid]);
+
+        int256 indexoftargetusername = findIndex(_targetusername, usernames[projectid]);
+        
+        require(indexofusername != -1, "username not found");
+        require(indexoftargetusername != -1, "target username not found");
+        // Set the decision at the specified index
+        userDecisions[projectid][uint256(indexofusername)][uint256(indexoftargetusername)] = decision; 
+        //userDecisions[_username][index] = decision;
+    }
+
+    function findIndex(string memory target, string[] memory stringArray) public view returns (int256) {
+        for (uint256 i = 0; i < stringArray.length; i++) {
+            if (keccak256(abi.encodePacked(stringArray[i])) == keccak256(abi.encodePacked(target))) {
+                // Strings match, return the index
                 return int256(i);
             }
         }
-        // Return -1 if the target value is not found
+
+        // String not found, return -1
         return -1;
     }
 
-
     // Function to determine if a username should be verified
-    function shouldVerify(string memory _username) external view returns (bool) { 
+    function shouldVerify(string memory _username, int256 projectid) external view returns (bool) { 
         uint256 numDecisions = 0; 
         uint256 approves = 0; 
         uint256 disproves = 0;
 
+        int256[10][10] memory projectmap = userDecisions[projectid];
+        string[] memory projectusernames = usernames[projectid];
 
-        for (uint256 i = 0; i < usernames.length; i++) {
-            int256[] memory voting = userDecisions[usernames[i]];
-            int256 index = findIndex(_username);
-            require (index != 1, "username is not valid");
-            if (voting[uint256(index)] != -1) {
-                numDecisions++;
+        int256 indextocheck = findIndex(_username, projectusernames);
+        require(indextocheck != -1, "username is not valid");
+        for (uint i = 0; i < 10; i++) {
+            if (projectmap[i][uint256(indextocheck)] != -1) {
+                numDecisions++; 
             }
 
-            if (voting[uint256(index)] == 1) {
-                approves++;
-            } else {
+            if (projectmap[i][uint256(indextocheck)] == 1) {
+                approves++; 
+            } 
+            if (projectmap[i][uint256(indextocheck)] == 0) {
                 disproves++; 
             }
         }
-        require(numDecisions > 0, "No one has voted for this user yet");
+
+        require(numDecisions > 0, "No one has voted for this user yet. Unable to verify");
         return (approves > disproves);
     }
-
-
-
 }
