@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 contract UserContract {
     address payable[] public addresses;
     uint[] public splits;
-    uint public money;
+    uint public eth;
 
     constructor(address payable[] memory _addresses, uint[] memory _splits) {
         require(_addresses.length == _splits.length, "Arrays length mismatch");
@@ -13,22 +13,30 @@ contract UserContract {
         splits = _splits;
     }
 
-    function getContractBalance() public view returns (uint) {
+    function getContractBalance() public returns (uint) {
+        eth = address(this).balance;
         return address(this).balance;
     }
 
     function sendMoney(uint index) public {
-        uint amount = (money * splits[index]) / 1000;
+        uint amount = (eth * splits[index]) / 100000;
 
         require(address(this).balance >= amount, "Insufficient balance");
 
-        addresses[index].transfer(amount);
+        (bool sent, bytes memory data) = addresses[index].call{value: amount}(
+            ""
+        );
+        require(sent, "Failed to send Ether");
     }
 
     event FundsReceived(address indexed sender, uint amount);
 
     receive() external payable {
         // emit FundsReceived(msg.sender, msg.value);
-        money = getContractBalance();
+
+        eth = getContractBalance();
+        for (uint i = 0; i < addresses.length; i++) {
+            sendMoney(i);
+        }
     }
 }
